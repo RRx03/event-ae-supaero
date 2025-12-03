@@ -4,6 +4,8 @@ import DotGrid from "../components/DotGrid";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import Image from "next/image";
+import WoodSprite from "../components/Woodsprite";
+
 import { useState, useEffect } from "react";
 
 const Avatar = localFont({
@@ -14,6 +16,8 @@ const Avatar = localFont({
 export default function Home() {
   return (
     <main className="transparent h-[1200px] w-screen overflow-hidden bg-[#050014] flex flex-col items-center justify-start gap-4 relative">
+      <WoodSprite />
+
       <DotGrid
         dotSize={1.4}
         gap={15}
