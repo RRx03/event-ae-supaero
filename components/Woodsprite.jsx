@@ -26,7 +26,7 @@ export default function WoodSprite() {
       "/woodsprite/7.png",
       "/woodsprite/8.png",
     ];
-    const frameDelays = [200, 60, 60, 60, 60, 60, 60, 60];
+    const frameDelays = [500, 150, 150, 200, 100, 100, 100, 100];
     const pulseFrameIndex = 5; // which frame triggers a pulse
     const angleStdDev = Math.PI / 16; // ~22.5° standard deviation for random angle change
     const impulseSpeed = 100; // impulse velocity in px/second
