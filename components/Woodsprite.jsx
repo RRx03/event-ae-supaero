@@ -209,7 +209,7 @@ export default function WoodSprite() {
   return (
     <canvas
       ref={canvasRef}
-      className={`absolute top-0 left-0 h-screen w-screen z-120 pointer-events-none`}
+      className={`fixed top-0 left-0 h-screen w-screen z-120 pointer-events-none`}
     />
   );
 }
