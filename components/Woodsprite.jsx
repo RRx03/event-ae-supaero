@@ -54,8 +54,8 @@ export default function WoodSprite() {
 
     // Sprite state
     let currentFrame = 0;
-    let posX = canvas.width * 2; // start at canvas center (you can choose any start pos)
-    let posY = canvas.height * 2;
+    let posX = canvas.width / 2; // start at canvas center (you can choose any start pos)
+    let posY = canvas.height / 2;
     let angle = 0; // initial orientation (radians, 0 = upward)
     let targetAngle = 0;
     let angleStart = 0;
