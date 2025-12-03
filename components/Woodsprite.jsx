@@ -54,8 +54,8 @@ export default function WoodSprite() {
 
     // Sprite state
     let currentFrame = 0;
-    let posX = canvas.width / 2; // start at canvas center (you can choose any start pos)
-    let posY = canvas.height / 2;
+    let posX = 10*canvas.width * randomNormal(0.5, 0.2);
+    let posY = 10*canvas.height * randomNormal(0.5, 0.2);
     let angle = 0; // initial orientation (radians, 0 = upward)
     let targetAngle = 0;
     let angleStart = 0;
@@ -156,7 +156,7 @@ export default function WoodSprite() {
       const f = frictionFactor(dt);
       velX *= f;
       velY *= f;
-      const scale = 0.1; // 10% size
+      const scale = 0.08;
 
       // Wrap around screen edges
       const spriteW = images[currentFrame].width * scale;
