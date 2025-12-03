@@ -12,6 +12,9 @@ export default function WoodSprite() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    let viewW = 0;
+    let viewH = 0;
+
     // ==== Configuration Constants ====
     const framePaths = [
       "/woodsprite/1.png",
@@ -54,8 +57,8 @@ export default function WoodSprite() {
 
     // Sprite state
     let currentFrame = 0;
-    let posX = 10*canvas.width * randomNormal(0.5, 0.2);
-    let posY = 10*canvas.height * randomNormal(0.5, 0.2);
+    let posX = 0.5 * window.innerWidth + (randomNormal(0, 0.15) * window.innerWidth);
+    let posY = 0.5 * window.innerHeight + (randomNormal(0, 0.15) * window.innerHeight);
     let angle = 0; // initial orientation (radians, 0 = upward)
     let targetAngle = 0;
     let angleStart = 0;
@@ -73,11 +76,26 @@ export default function WoodSprite() {
       return mean + stdDev * randStdNorm;
     }
 
-    // Set canvas size to fill screen
+    // Set canvas size to fill screen with DPR awareness
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      // No background fill -> canvas is transparent
+      const dpr = Math.min(window.devicePixelRatio || 1, 2); // cap DPR if you want
+      viewW = window.innerWidth;
+      viewH = window.innerHeight;
+
+      // CSS size
+      canvas.style.width = viewW + "px";
+      canvas.style.height = viewH + "px";
+
+      // Backing store size in physical pixels
+      canvas.width = Math.floor(viewW * dpr);
+      canvas.height = Math.floor(viewH * dpr);
+
+      // Map 1 canvas unit == 1 CSS px
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      // High quality scaling
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
     };
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
@@ -94,8 +112,8 @@ export default function WoodSprite() {
       const ctxNonNull = ctx;
       const canvasNonNull = canvas;
 
-      // Clear the canvas for redraw (clear with transparency)
-      ctxNonNull.clearRect(0, 0, canvasNonNull.width, canvasNonNull.height);
+      // Clear the canvas for redraw (clear with transparency) using logical units
+      ctxNonNull.clearRect(0, 0, viewW, viewH);
 
       // === Update Sprite Animation Frame ===
       frameTimeAccum += dt;
@@ -158,13 +176,13 @@ export default function WoodSprite() {
       velY *= f;
       const scale = 0.08;
 
-      // Wrap around screen edges
+      // Wrap around screen edges using logical units
       const spriteW = images[currentFrame].width * scale;
       const spriteH = images[currentFrame].height * scale;
-      if (posX < 0) posX = canvasNonNull.width;
-      else if (posX > canvasNonNull.width) posX = 0;
-      if (posY < 0) posY = canvasNonNull.height;
-      else if (posY > canvasNonNull.height) posY = 0;
+      if (posX < 0) posX = viewW;
+      else if (posX > viewW) posX = 0;
+      if (posY < 0) posY = viewH;
+      else if (posY > viewH) posY = 0;
 
       // === Draw the current frame of the sprite ===
       // To draw rotated, translate context to sprite center, rotate, draw image centered, then restore.
