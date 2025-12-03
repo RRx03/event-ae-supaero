@@ -70,19 +70,21 @@ export default function Home() {
         </svg>
         <iframe
           id="haWidget"
-          allowtransparency="true"
+          title="HelloAsso – Inscription"
           src="https://www.helloasso.com/associations/4l-trophy-isae-supaero/evenements/supavatar-test/widget"
-          className="w-5/6 border-none"
+          className="w-5/6 border-0"
           onLoad={() => {
-            window.addEventListener('message', function(e) {
-              const dataHeight = e.data.height;
-              const haWidgetElement = document.getElementById('haWidget');
-              if (haWidgetElement) {
-                haWidgetElement.style.height = dataHeight + 'px';
-              }
-            });
+            const handler = (e: MessageEvent) => {
+              if (!String(e.origin).endsWith("helloasso.com")) return;
+              const h = (e.data as any)?.height;
+              const el = document.getElementById(
+                "haWidget"
+              ) as HTMLIFrameElement | null;
+              if (el && typeof h === "number") el.style.height = `${h}px`;
+            };
+            window.addEventListener("message", handler, { once: false });
           }}
-        ></iframe>
+        />
       </div>
     </main>
   );
