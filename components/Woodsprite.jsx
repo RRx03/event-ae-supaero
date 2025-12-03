@@ -174,11 +174,9 @@ export default function WoodSprite() {
       const f = frictionFactor(dt);
       velX *= f;
       velY *= f;
-      const scale = 0.08;
+      const scale = 0.05;
 
       // Wrap around screen edges using logical units
-      const spriteW = images[currentFrame].width * scale;
-      const spriteH = images[currentFrame].height * scale;
       if (posX < 0) posX = viewW;
       else if (posX > viewW) posX = 0;
       if (posY < 0) posY = viewH;
