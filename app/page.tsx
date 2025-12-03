@@ -47,7 +47,7 @@ export default function Home() {
           <text
             x="54%"
             y="50%"
-            dominantBaseline="start"
+            dominantBaseline="middle"
             textAnchor="middle"
             fontSize="130"
             fontWeight="800"
@@ -59,7 +59,7 @@ export default function Home() {
           <text
             x="50%"
             y="70%"
-            dominantBaseline="start"
+            dominantBaseline="middle"
             textAnchor="middle"
             fontSize="35"
             fontWeight="800"
