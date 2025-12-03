@@ -26,11 +26,11 @@ export default function WoodSprite() {
       "/woodsprite/7.png",
       "/woodsprite/8.png",
     ];
-    const frameDelays = [50, 50, 50, 50, 50, 50, 50, 100];
+    const frameDelays = [200, 60, 60, 60, 60, 60, 60, 60];
     const pulseFrameIndex = 5; // which frame triggers a pulse
     const angleStdDev = Math.PI / 16; // ~22.5° standard deviation for random angle change
-    const impulseSpeed = 10; // impulse velocity in px/second
-    const frictionPerSec = 0.8; // fraction of velocity retained after 1 second (e.g., 0.5 = 50%)
+    const impulseSpeed = 100; // impulse velocity in px/second
+    const frictionPerSec = 0.2; // fraction of velocity retained after 1 second (e.g., 0.5 = 50%)
     // ================================
 
     // Calculate a per-frame friction factor from frictionPerSec for the animation loop:
