@@ -4,7 +4,7 @@ import DotGrid from "../components/DotGrid";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import Image from "next/image";
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const Avatar = localFont({
   src: "./fonts/Avatar.ttf",
@@ -72,7 +72,7 @@ export default function Home() {
         <iframe
           id="haWidget"
           title="HelloAsso – Inscription"
-          src="https://www.helloasso.com/associations/4l-trophy-isae-supaero/evenements/supavatar-test/widget"
+          src="https://www.helloasso.com/associations/association-des-eleves-de-l-isae/evenements/billeterie-supavatar-tarif-normal/widget"
           className="w-5/6 border-0 h-[1000px]"
           onLoad={() => {
             const handler = (e: MessageEvent<{ height?: number }>) => {
