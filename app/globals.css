@@ -24,3 +24,19 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+.curved-loop-svg {
+  user-select: none;
+  width: 100%;
+  overflow: visible;
+  display: block;
+  font-size: 120px;
+  fill: #4de1ff;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1;
+}
