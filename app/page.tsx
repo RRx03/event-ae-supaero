@@ -5,7 +5,6 @@ import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import Image from "next/image";
 
-
 const Avatar = localFont({
   src: "./fonts/Avatar.ttf",
   display: "swap",
@@ -15,15 +14,18 @@ export default function Home() {
   return (
     <main className="transparent h-[1200px] w-screen overflow-hidden bg-[#050014] flex flex-col items-center justify-start gap-4 relative">
       <DotGrid
-        dotSize={1.5}
+        dotSize={1.4}
         gap={15}
         baseColor="#00bfffff"
         className="absolute top-0 left-0 h-screen w-screen z-100"
       />
       <div
-        className={`w-full flex flex-col items-center justify-start gap-4 absolute top-0 left-0 z-110 ${Avatar.className}`}
+        className={`w-full flex flex-col items-center justify-center gap-4 absolute top-0 left-0 z-110 ${Avatar.className}`}
       >
-        <svg  viewBox="0 0 1000 400" className="transform translate-y-[-30%] w-1/2 h-auto">
+        <svg
+          viewBox="0 0 1000 400"
+          className="w-full h-auto md:w-1/2 md:h-auto "
+        >
           <defs>
             <filter
               id="textShadow"
@@ -43,18 +45,44 @@ export default function Home() {
           </defs>
 
           <text
-            x="50%"
+            x="54%"
             y="50%"
-            dominantBaseline="middle"
+            dominantBaseline="start"
             textAnchor="middle"
-            fontSize="100"
+            fontSize="130"
             fontWeight="800"
             fill="#b5f3ffff"
             filter="url(#textShadow)"
           >
             SUPAVATAR
           </text>
+          <text
+            x="50%"
+            y="70%"
+            dominantBaseline="start"
+            textAnchor="middle"
+            fontSize="35"
+            fontWeight="800"
+            fill="#b5f3ffff"
+          >
+            AE ISAE-SUPAERO
+          </text>
         </svg>
+        <iframe
+          id="haWidget"
+          allowtransparency="true"
+          src="https://www.helloasso.com/associations/4l-trophy-isae-supaero/evenements/supavatar-test/widget"
+          className="w-5/6 border-none"
+          onLoad={() => {
+            window.addEventListener('message', function(e) {
+              const dataHeight = e.data.height;
+              const haWidgetElement = document.getElementById('haWidget');
+              if (haWidgetElement) {
+                haWidgetElement.style.height = dataHeight + 'px';
+              }
+            });
+          }}
+        ></iframe>
       </div>
     </main>
   );
