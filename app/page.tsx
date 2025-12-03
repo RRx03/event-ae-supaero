@@ -4,7 +4,6 @@ import DotGrid from "../components/DotGrid";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import Image from "next/image";
-import MetallicPaint, { parseLogoImage } from "../components/MetallicPaint";
 import { useState, useEffect } from 'react';
 
 const Avatar = localFont({
