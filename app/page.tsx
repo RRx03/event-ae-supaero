@@ -40,7 +40,7 @@ export default function Home() {
                 dy="0"
                 stdDeviation="40"
                 floodColor="#4de1ff"
-                floodOpacity="1"
+                floodOpacity="0.9"
               />
             </filter>
           </defs>
