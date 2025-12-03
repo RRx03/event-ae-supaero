@@ -5,12 +5,6 @@ import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import Image from "next/image";
 
-import dynamic from "next/dynamic";
-
-const ProceduralTextFill = dynamic(
-  () => import("./components/ProceduralTextFill"),
-  { ssr: false } // client-only (canvas)
-);
 
 const Avatar = localFont({
   src: "./fonts/Avatar.ttf",
