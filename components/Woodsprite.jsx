@@ -25,7 +25,7 @@ export default function WoodSprite() {
     ];
     const frameDelays = [50, 50, 50, 50, 50, 50, 50, 100];
     const pulseFrameIndex = 5; // which frame triggers a pulse
-    const angleStdDev = Math.PI / 32; // ~22.5° standard deviation for random angle change
+    const angleStdDev = Math.PI / 16; // ~22.5° standard deviation for random angle change
     const impulseSpeed = 10; // impulse velocity in px/second
     const frictionPerSec = 0.8; // fraction of velocity retained after 1 second (e.g., 0.5 = 50%)
     // ================================
@@ -189,11 +189,9 @@ export default function WoodSprite() {
 
   // The canvas element (fill the parent container which should be full-screen)
   return (
-    <div style={{ position: "relative" }}>
-      <canvas
-        ref={canvasRef}
-        className={`absolute top-0 left-0 h-screen w-screen z-100 `}
-      />
-    </div>
+    <canvas
+      ref={canvasRef}
+      className={`absolute top-0 left-0 h-screen w-screen z-100 `}
+    />
   );
 }

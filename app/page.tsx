@@ -16,7 +16,7 @@ const Avatar = localFont({
 export default function Home() {
   return (
     <main className="transparent h-[1200px] w-screen overflow-hidden bg-[#050014] flex flex-col items-center justify-start gap-4 relative">
-      <WoodSprite />
+      <WoodSprite className="absolute top-0 left-0 transform translate-y-[-50%] h-screen w-screen z-100 border-10"/>
 
       <DotGrid
         dotSize={1.4}
