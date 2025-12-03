@@ -72,11 +72,11 @@ export default function Home() {
           id="haWidget"
           title="HelloAsso – Inscription"
           src="https://www.helloasso.com/associations/4l-trophy-isae-supaero/evenements/supavatar-test/widget"
-          className="w-5/6 border-0"
+          className="w-5/6 border-0 h-[1000px]"
           onLoad={() => {
-            const handler = (e: MessageEvent) => {
+            const handler = (e: MessageEvent<{ height?: number }>) => {
               if (!String(e.origin).endsWith("helloasso.com")) return;
-              const h = (e.data as any)?.height;
+              const h = e.data?.height;
               const el = document.getElementById(
                 "haWidget"
               ) as HTMLIFrameElement | null;
