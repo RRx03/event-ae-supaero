@@ -16,12 +16,6 @@ const Avatar = localFont({
 export default function Home() {
   return (
     <main className="transparent h-[1200px] w-screen overflow-hidden bg-[#050014] flex flex-col items-center justify-start gap-4 relative">
-      <WoodSprite />
-      <WoodSprite />
-      <WoodSprite />
-      <WoodSprite />
-      <WoodSprite />
-
       <DotGrid
         dotSize={1.4}
         gap={15}
@@ -29,11 +23,11 @@ export default function Home() {
         className="absolute top-0 left-0 h-screen w-screen z-100"
       />
       <div
-        className={`w-full flex flex-col items-center justify-center gap-4 absolute top-0 left-0 z-110 ${Avatar.className}`}
+        className={`w-full flex flex-col items-center justify-center gap-4 absolute top-0 left-0 ${Avatar.className}`}
       >
         <svg
           viewBox="0 0 1000 400"
-          className="w-full h-auto md:w-1/2 md:h-auto "
+          className="w-full h-auto md:w-1/2 md:h-auto z-130"
         >
           <defs>
             <filter
@@ -81,7 +75,7 @@ export default function Home() {
           id="haWidget"
           title="HelloAsso – Inscription"
           src="https://www.helloasso.com/associations/association-des-eleves-de-l-isae/evenements/billeterie-supavatar-tarif-normal/widget"
-          className="w-5/6 border-0 h-[1000px]"
+          className="w-5/6 border-0 h-[1000px] z-110"
           onLoad={() => {
             const handler = (e: MessageEvent<{ height?: number }>) => {
               if (!String(e.origin).endsWith("helloasso.com")) return;
@@ -95,6 +89,11 @@ export default function Home() {
           }}
         />
       </div>
+      <WoodSprite />
+      <WoodSprite />
+      <WoodSprite />
+      <WoodSprite />
+      <WoodSprite />
     </main>
   );
 }
