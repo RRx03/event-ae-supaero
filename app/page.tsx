@@ -90,10 +90,10 @@ export default function Home() {
         />
       </div>
       <WoodSprite />
+      {/* <WoodSprite />
       <WoodSprite />
       <WoodSprite />
-      <WoodSprite />
-      <WoodSprite />
+      <WoodSprite /> */}
     </main>
   );
 }
