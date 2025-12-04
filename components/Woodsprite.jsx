@@ -116,7 +116,6 @@ export default function WoodSprite({ numberOfSprites = 1 }) {
       const dt = timestamp - lastTimestamp;
       lastTimestamp = timestamp;
       const ctxNonNull = ctx;
-      const canvasNonNull = canvas;
 
       ctxNonNull.clearRect(0, 0, viewW, viewH);
 
