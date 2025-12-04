@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 
-export default function WoodSprite() {
+export default function WoodSprite({ numberOfSprites = 1 }) {
   // Canvas reference
   const canvasRef = useRef(null);
 
@@ -28,21 +28,15 @@ export default function WoodSprite() {
       "/woodsprite/9.png",
       "/woodsprite/10.png",
       "/woodsprite/11.png",
-
     ];
     const frameDelays = [60, 60, 60, 60, 60, 60, 60, 60, 60, 300, 500]; // milliseconds per frame
-    const pulseFrameIndex = 7; // which frame triggers a pulse
-    const angleStdDev = Math.PI / 16; // ~22.5° standard deviation for random angle change
+    const pulseFrameIndex = 7;
+    const angleStdDev = Math.PI / 16;
     const impulseSpeed = 100; // impulse velocity in px/second
     const frictionPerSec = 0.2; // fraction of velocity retained after 1 second (e.g., 0.5 = 50%)
-    // ================================
 
-    // Calculate a per-frame friction factor from frictionPerSec for the animation loop:
-    // If frictionPerSec = 0.5, then per second velocity becomes 0.5 of original. For small dt:
     const frictionFactor = (dt) => Math.pow(frictionPerSec, dt / 1000);
-    // This yields an exponential decay: after dt milliseconds, velocity is multiplied by frictionFactor(dt).
 
-    // Load all sprite frame images
     const images = [];
     let imagesLoaded = 0;
     for (const path of framePaths) {
@@ -50,154 +44,164 @@ export default function WoodSprite() {
       img.src = path;
       img.onload = () => {
         imagesLoaded++;
-        // Once all images are loaded, we can start the animation
         if (imagesLoaded === framePaths.length) {
           requestAnimationFrame(loop);
         }
       };
-      //scale down images
       images.push(img);
     }
 
-    // Sprite state
-    let currentFrame = 0;
-    let posX = 0.5 * window.innerWidth + (randomNormal(0, 0.15) * window.innerWidth);
-    let posY = 0.5 * window.innerHeight + (randomNormal(0, 0.15) * window.innerHeight);
-    let angle = 0; // initial orientation (radians, 0 = upward)
-    let targetAngle = 0;
-    let angleStart = 0;
-    let angleChangeStartTime = 0;
-    let angleTransitionDuration = 0;
-    let velX = 0;
-    let velY = 0;
-
+    let currentFrame = new Array(numberOfSprites);
+    let posX = new Array(numberOfSprites);
+    let posY = new Array(numberOfSprites);
+    let angle = new Array(numberOfSprites);
+    let targetAngle = new Array(numberOfSprites);
+    let angleStart = new Array(numberOfSprites);
+    let angleChangeStartTime = new Array(numberOfSprites);
+    let angleTransitionDuration = new Array(numberOfSprites);
+    let velX = new Array(numberOfSprites);
+    let velY = new Array(numberOfSprites);
+    for (let i = 0; i < numberOfSprites; i++) {
+      currentFrame[i] = Math.floor(Math.random() * framePaths.length);
+      posX[i] = 0.5 * window.innerWidth + randomNormal(0, 0.15) * window.innerWidth;
+      posY[i] = 0.5 * window.innerHeight + randomNormal(0, 0.15) * window.innerHeight;
+      angle[i] = 0;
+      targetAngle[i] = 0;
+      angleStart[i] = 0;
+      angleChangeStartTime[i] = 0;
+      angleTransitionDuration[i] = 0;
+      velX[i] = 0;
+      velY[i] = 0;
+    }
+    // let posX = 0.5 * window.innerWidth + (randomNormal(0, 0.15) * window.innerWidth);
+    // let posY = 0.5 * window.innerHeight + (randomNormal(0, 0.15) * window.innerHeight);
+    // let angle = 0; // initial orientation (radians, 0 = upward)
+    // let targetAngle = 0;
+    // let angleStart = 0;
+    // let angleChangeStartTime = 0;
+    // let angleTransitionDuration = 0;
+    // let velX = 0;
+    // let velY = 0;
     // Utility: generate normal random for angle offset
+
     function randomNormal(mean = 0, stdDev = 1) {
       const u = 1 - Math.random();
       const v = 1 - Math.random();
       const randStdNorm =
-        Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); // [oai_citation:4‡stackoverflow.com](https://stackoverflow.com/questions/25582882/javascript-math-random-normal-distribution-gaussian-bell-curve#:~:text=const%20normal%20%3D%20%28%29%20%3D,Math.random)
+        Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
       return mean + stdDev * randStdNorm;
     }
 
-    // Set canvas size to fill screen with DPR awareness
     const resizeCanvas = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2); // cap DPR if you want
       viewW = window.innerWidth;
       viewH = window.innerHeight;
 
-      // CSS size
       canvas.style.width = viewW + "px";
       canvas.style.height = viewH + "px";
 
-      // Backing store size in physical pixels
       canvas.width = Math.floor(viewW * dpr);
       canvas.height = Math.floor(viewH * dpr);
-
-      // Map 1 canvas unit == 1 CSS px
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-      // High quality scaling
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = "high";
     };
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    // Animation loop variables for frame timing
     let lastTimestamp = performance.now();
-    let frameTimeAccum = 0; // time accumulated towards next frame change
+    let frameTimeAccum = new Array(numberOfSprites).fill(0);
 
     function loop(timestamp) {
       const dt = timestamp - lastTimestamp;
       lastTimestamp = timestamp;
-
-      // Assert non-null once for use throughout this frame (avoids repeated null checks)
       const ctxNonNull = ctx;
       const canvasNonNull = canvas;
 
-      // Clear the canvas for redraw (clear with transparency) using logical units
       ctxNonNull.clearRect(0, 0, viewW, viewH);
 
-      // === Update Sprite Animation Frame ===
-      frameTimeAccum += dt;
-      if (frameTimeAccum >= frameDelays[currentFrame]) {
-        // Move to next frame, accounting for possibly large dt (if loop was slowed)
-        frameTimeAccum -= frameDelays[currentFrame];
-        currentFrame = (currentFrame + 1) % images.length;
-        // If multiple frames should be skipped (in case of extreme lag), loop accordingly:
-        while (frameTimeAccum >= frameDelays[currentFrame]) {
-          frameTimeAccum -= frameDelays[currentFrame];
-          currentFrame = (currentFrame + 1) % images.length;
+      for (let i = 0; i < numberOfSprites; i++) {
+        frameTimeAccum[i] += dt;
+
+        if (frameTimeAccum[i] >= frameDelays[currentFrame[i]]) {
+          // Move to next frame, accounting for possibly large dt (if loop was slowed)
+          frameTimeAccum[i] -= frameDelays[currentFrame[i]];
+          currentFrame[i] = (currentFrame[i] + 1) % images.length;
+          // If multiple frames should be skipped (in case of extreme lag), loop accordingly:
+          while (frameTimeAccum[i] >= frameDelays[currentFrame[i]]) {
+            frameTimeAccum[i] -= frameDelays[currentFrame[i]];
+            currentFrame[i] = (currentFrame[i] + 1) % images.length;
+          }
+
+          // Check for pulse event (if we just switched to the designated pulse frame)
+          if (currentFrame[i] === pulseFrameIndex) {
+            // Trigger movement impulse
+            // Compute orientation unit vector for current angle (remember: angle=0 is upward)
+            const dirX = Math.sin(angle[i]); // horizontal component
+            const dirY = -Math.cos(angle[i]); // vertical component (negative because canvas Y is downwards)
+            // Apply impulse to velocity
+            velX[i] += dirX * impulseSpeed;
+            velY[i] += dirY * impulseSpeed;
+            // Choose a new random target angle for the next pulse cycle
+            angleStart[i] = angle[i];
+            const angleOffset = randomNormal(0, angleStdDev);
+            targetAngle[i] = angle[i] + angleOffset;
+            // Normalize targetAngle to keep it within [-π, π] range for shorter rotation
+            if (targetAngle[i] > Math.PI) targetAngle[i] -= 2 * Math.PI;
+            if (targetAngle[i] < -Math.PI) targetAngle[i] += 2 * Math.PI;
+            // Set up eased rotation transition from current angle to targetAngle
+            angleChangeStartTime[i] = timestamp;
+            angleTransitionDuration[i] = frameDelays
+              .slice(currentFrame[i])
+              .reduce((a, b) => a + b, 0); // sum of remaining frame delays in this cycle
+          }
         }
 
-        // Check for pulse event (if we just switched to the designated pulse frame)
-        if (currentFrame === pulseFrameIndex) {
-          // Trigger movement impulse
-          // Compute orientation unit vector for current angle (remember: angle=0 is upward)
-          const dirX = Math.sin(angle); // horizontal component
-          const dirY = -Math.cos(angle); // vertical component (negative because canvas Y is downwards)
-          // Apply impulse to velocity
-          velX += dirX * impulseSpeed;
-          velY += dirY * impulseSpeed;
-          // Choose a new random target angle for the next pulse cycle
-          angleStart = angle;
-          const angleOffset = randomNormal(0, angleStdDev);
-          targetAngle = angle + angleOffset;
-          // Normalize targetAngle to keep it within [-π, π] range for shorter rotation
-          if (targetAngle > Math.PI) targetAngle -= 2 * Math.PI;
-          if (targetAngle < -Math.PI) targetAngle += 2 * Math.PI;
-          // Set up eased rotation transition from current angle to targetAngle
-          angleChangeStartTime = timestamp;
-          angleTransitionDuration = frameDelays.reduce((a, b) => a + b, 0); // total duration of one cycle (sum of frameDelays)
+        // === Update Orientation (ease towards targetAngle if in a transition) ===
+        if (angle[i] !== targetAngle[i]) {
+          // Calculate how far into the transition we are
+          const t = angleTransitionDuration[i]
+            ? (timestamp - angleChangeStartTime[i]) / angleTransitionDuration[i]
+            : 1;
+          const progress = Math.min(t, 1);
+          // Ease-in-out interpolation (using cosine formula for smooth acceleration/deceleration)
+          const eased = -(Math.cos(Math.PI * progress) - 1) / 2; // easeInOutSine [oai_citation:5‡nicmulvaney.com](https://nicmulvaney.com/easing#:~:text=)
+          angle[i] = angleStart[i] + eased * (targetAngle[i] - angleStart[i]);
+          if (progress >= 1) {
+            // Finished rotation
+            angle[i] = targetAngle[i];
+          }
         }
+
+        // === Update Position based on velocity ===
+        // Convert dt to seconds for velocity integration
+        const dtSec = dt / 1000;
+        posX[i] += velX[i] * dtSec;
+        posY[i] += velY[i] * dtSec;
+        // Apply friction (damping) to velocity
+        const f = frictionFactor(dt);
+        velX[i] *= f;
+        velY[i] *= f;
+        const scale = 0.05;
+
+        // Wrap around screen edges using logical units
+        if (posX[i] < 0) posX[i] = viewW;
+        else if (posX[i] > viewW) posX[i] = 0;
+        if (posY[i] < 0) posY[i] = viewH;
+        else if (posY[i] > viewH) posY[i] = 0;
+
+        // === Draw the current frame of the sprite ===
+        // To draw rotated, translate context to sprite center, rotate, draw image centered, then restore.
+        ctxNonNull.save();
+        ctxNonNull.translate(posX[i], posY[i]);
+        ctxNonNull.rotate(angle[i]); // rotate clockwise by `angle` radians around the translated origin [oai_citation:6‡developer.mozilla.org](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/rotate#:~:text=angle) [oai_citation:7‡developer.mozilla.org](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/rotate#:~:text=Rotating%20a%20shape%20around%20its,center)
+        const img = images[currentFrame[i]];
+        const w = img.width * scale;
+        const h = img.height * scale;
+        ctxNonNull.drawImage(img, -w / 2, -h / 2, w, h);
+        ctxNonNull.restore();
       }
-
-      // === Update Orientation (ease towards targetAngle if in a transition) ===
-      if (angle !== targetAngle) {
-        // Calculate how far into the transition we are
-        const t = angleTransitionDuration
-          ? (timestamp - angleChangeStartTime) / angleTransitionDuration
-          : 1;
-        const progress = Math.min(t, 1);
-        // Ease-in-out interpolation (using cosine formula for smooth acceleration/deceleration)
-        const eased = -(Math.cos(Math.PI * progress) - 1) / 2; // easeInOutSine [oai_citation:5‡nicmulvaney.com](https://nicmulvaney.com/easing#:~:text=)
-        angle = angleStart + eased * (targetAngle - angleStart);
-        if (progress >= 1) {
-          // Finished rotation
-          angle = targetAngle;
-        }
-      }
-
-      // === Update Position based on velocity ===
-      // Convert dt to seconds for velocity integration
-      const dtSec = dt / 1000;
-      posX += velX * dtSec;
-      posY += velY * dtSec;
-      // Apply friction (damping) to velocity
-      const f = frictionFactor(dt);
-      velX *= f;
-      velY *= f;
-      const scale = 0.05;
-
-      // Wrap around screen edges using logical units
-      if (posX < 0) posX = viewW;
-      else if (posX > viewW) posX = 0;
-      if (posY < 0) posY = viewH;
-      else if (posY > viewH) posY = 0;
-
-      // === Draw the current frame of the sprite ===
-      // To draw rotated, translate context to sprite center, rotate, draw image centered, then restore.
-      ctxNonNull.save();
-      ctxNonNull.translate(posX, posY);
-      ctxNonNull.rotate(angle); // rotate clockwise by `angle` radians around the translated origin [oai_citation:6‡developer.mozilla.org](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/rotate#:~:text=angle) [oai_citation:7‡developer.mozilla.org](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/rotate#:~:text=Rotating%20a%20shape%20around%20its,center)
-      const img = images[currentFrame];
-      const w = img.width * scale;
-      const h = img.height * scale;
-      ctxNonNull.drawImage(img, -w / 2, -h / 2, w, h);
-      ctxNonNull.restore();
-
-      // Loop continuously
+      // After drawing all sprites, schedule the next frame once
       requestAnimationFrame(loop);
     }
 
