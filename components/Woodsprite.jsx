@@ -122,21 +122,16 @@ export default function WoodSprite({ numberOfSprites = 1 }) {
 
       for (let i = 0; i < numberOfSprites; i++) {
         frameTimeAccum[i] += dt;
-
-        if (frameTimeAccum[i] >= frameDelays[currentFrame[i]]) {
-          // Move to next frame, accounting for possibly large dt (if loop was slowed)
-          frameTimeAccum[i] -= frameDelays[currentFrame[i]];
+        const randomTimeOffset = Math.floor(Math.random() * 20);
+        if (frameTimeAccum[i] >= frameDelays[currentFrame[i]]+randomTimeOffset) {
+          frameTimeAccum[i] -= frameDelays[currentFrame[i]]+randomTimeOffset;
           currentFrame[i] = (currentFrame[i] + 1) % images.length;
-          // If multiple frames should be skipped (in case of extreme lag), loop accordingly:
           while (frameTimeAccum[i] >= frameDelays[currentFrame[i]]) {
             frameTimeAccum[i] -= frameDelays[currentFrame[i]];
             currentFrame[i] = (currentFrame[i] + 1) % images.length;
           }
 
-          // Check for pulse event (if we just switched to the designated pulse frame)
           if (currentFrame[i] === pulseFrameIndex) {
-            // Trigger movement impulse
-            // Compute orientation unit vector for current angle (remember: angle=0 is upward)
             const dirX = Math.sin(angle[i]); // horizontal component
             const dirY = -Math.cos(angle[i]); // vertical component (negative because canvas Y is downwards)
             // Apply impulse to velocity
