@@ -89,8 +89,8 @@ export default function Home() {
           }}
         />
       </div>
-      <WoodSprite numberOfSprites={10} />
-      {/* <WoodSprite />
+      <WoodSprite numberOfSprites={6} />
+      {/* <WoodSprite numberOfSprites={5} />
       <WoodSprite />
       <WoodSprite />
       <WoodSprite /> */}
