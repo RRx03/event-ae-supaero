@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-[#050014] h-screen w-screen overflow-scroll`}
+        className={`${geistSans.variable} ${geistMono.variable} bg-[#050014] min-h-screen w-screen overflow-x-hidden`}
       >
         <DotGrid
           dotSize={1.4}
