@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="relative isolate min-h-screen w-screen overflow-x-hidden">
+      <body className="relative isolate bg-[#050014] min-h-screen w-screen overflow-x-hidden">
         <DotGrid
           dotSize={6}
           gap={24}

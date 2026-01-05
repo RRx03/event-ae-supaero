@@ -1,65 +1,58 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 export default function DotGrid({
-  dotSize = 6,           // volontairement gros pour test
-  gap = 24,
+  dotSize = 2,
+  gap = 16,
   baseColor = "#00bfff",
-  opacity = 1,
+  opacity = 0.6,
   className = "",
   style = {},
 }) {
   const canvasRef = useRef(null);
 
+  const circlePath = useMemo(() => {
+    if (typeof window === "undefined" || !window.Path2D) return null;
+    const p = new Path2D();
+    p.arc(0, 0, dotSize / 2, 0, Math.PI * 2);
+    return p;
+  }, [dotSize]);
+
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || !circlePath) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     const draw = () => {
       const dpr = window.devicePixelRatio || 1;
-      const cssW = window.innerWidth;
-      const cssH = window.innerHeight;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
 
-      const pxW = Math.floor(cssW * dpr);
-      const pxH = Math.floor(cssH * dpr);
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
 
-      canvas.style.width = `${cssW}px`;
-      canvas.style.height = `${cssH}px`;
-      canvas.width = pxW;
-      canvas.height = pxH;
-
-      // on dessine en coordonnées CSS (plus simple) en utilisant setTransform
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.globalCompositeOperation = "source-over";
-      ctx.imageSmoothingEnabled = false;
+      ctx.clearRect(0, 0, w, h);
 
-      // VOILE VISIBLE (si tu vois ça, le canvas dessine)
-      ctx.clearRect(0, 0, cssW, cssH);
-      ctx.fillStyle = "rgba(255, 0, 0, 0.08)";
-      ctx.fillRect(0, 0, cssW, cssH);
-
-      // LIGNE + POINT GÉANT pour valider la couleur
-      ctx.globalAlpha = 1;
-      ctx.strokeStyle = "lime";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(cssW, cssH);
-      ctx.stroke();
-
-      ctx.fillStyle = baseColor;
       ctx.globalAlpha = opacity;
-      ctx.fillRect(40, 40, 40, 40); // carré géant cyan -> doit être visible
+      ctx.fillStyle = baseColor;
 
-      // DOT GRID
       const cell = dotSize + gap;
-      for (let y = 0; y < cssH; y += cell) {
-        for (let x = 0; x < cssW; x += cell) {
-          ctx.fillRect(x, y, dotSize, dotSize);
+
+      // petit snap pour éviter le flou
+      const snap = (v) => Math.round(v) + 0.5;
+
+      for (let y = 0; y < h + cell; y += cell) {
+        for (let x = 0; x < w + cell; x += cell) {
+          ctx.save();
+          ctx.translate(snap(x), snap(y));
+          ctx.fill(circlePath);
+          ctx.restore();
         }
       }
 
@@ -69,7 +62,7 @@ export default function DotGrid({
     draw();
     window.addEventListener("resize", draw);
     return () => window.removeEventListener("resize", draw);
-  }, [dotSize, gap, baseColor, opacity]);
+  }, [circlePath, dotSize, gap, baseColor, opacity]);
 
   return (
     <canvas
