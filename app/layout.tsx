@@ -29,12 +29,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-[#050014] min-h-screen w-screen overflow-x-hidden relative isolate`}
       >
-        <DotGrid
-          dotSize={2.2}
-          gap={16}
-          baseColor="#00bfff"
-          className="z-[-1]"
-        />
+        <DotGrid className="z-[9999]" />
         {children}
         <WoodSprite numberOfSprites={5} className="z-[5]" />
       </body>
