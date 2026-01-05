@@ -15,7 +15,7 @@ const Avatar = localFont({
 
 export default function Home() {
   return (
-    <main className="transparent h-[1200px] w-screen overflow-hidden bg-[#050014] flex flex-col items-center justify-start gap-4 relative">
+    <main className="transparent min-h-[1200px] w-screen overflow-hidden bg-[#050014] flex flex-col items-center justify-start gap-4 relative">
       <DotGrid
         dotSize={1.4}
         gap={15}
