@@ -74,7 +74,7 @@ export default function Home() {
         <iframe
           id="haWidget"
           title="HelloAsso – Inscription"
-          src="https://www.helloasso.com/associations/association-des-eleves-de-l-isae/evenements/billeterie-supavatar-tarif-late/widget"
+          src="https://www.helloasso.com/associations/association-des-eleves-de-l-isae/evenements/billeterie-supavatar-tarif-late/widget-bouton"
           className="w-5/6 border-0 h-[1000px] z-110"
           onLoad={() => {
             const handler = (e: MessageEvent<{ height?: number }>) => {
@@ -93,3 +93,6 @@ export default function Home() {
     </main>
   );
 }
+
+
+
