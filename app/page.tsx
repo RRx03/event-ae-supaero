@@ -74,7 +74,7 @@ export default function Home() {
         <iframe
           id="haWidget"
           title="HelloAsso – Inscription"
-          src="https://www.helloasso.com/associations/association-des-eleves-de-l-isae/evenements/supavatar-billeterie-test/widget"
+          src="https://www.helloasso.com/associations/association-des-eleves-de-l-isae/evenements/billeterie-supavatar-tarif-early/widget"
           className="w-5/6 border-0"
           style={{ height: `${iframeHeight}px` }}
         />
@@ -82,3 +82,4 @@ export default function Home() {
     </main>
   );
 }
+
