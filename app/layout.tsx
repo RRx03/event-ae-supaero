@@ -28,10 +28,10 @@ export default function RootLayout({
     <html lang="en">
       <body className="relative isolate bg-[#050014] min-h-screen w-screen overflow-x-hidden">
         <DotGrid
-          dotSize={6}
-          gap={24}
+          dotSize={2}
+          gap={16}
           baseColor="#00bfff"
-          opacity={1}
+          opacity={0.7}
           className="z-[0]"
         />
         {children}
