@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css"; 
+import "./globals.css";
+import DotGrid from "../components/DotGrid";
+import WoodSprite from "../components/Woodsprite";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,9 +29,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-[#050014]`}
       >
-
-        {children}
-        
+        <DotGrid
+          dotSize={1.4}
+          gap={15}
+          baseColor="#00bfffff"
+          className="fixed inset-0 z-0 pointer-events-none"
+        >
+          {children}
+        </DotGrid>
+        <WoodSprite numberOfSprites={5} />
       </body>
     </html>
   );

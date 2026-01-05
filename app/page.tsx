@@ -1,7 +1,6 @@
 "use client";
 
-import DotGrid from "../components/DotGrid";
-import WoodSprite from "../components/Woodsprite";
+
 import localFont from "next/font/local";
 import { useEffect, useState } from "react";
 
@@ -25,15 +24,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className={`w-screen bg-[#050014] ${Avatar.className} relative`}>
-      <DotGrid
-        dotSize={1.4}
-        gap={15}
-        baseColor="#00bfffff"
-        className="fixed inset-0 h-screen w-screen z-0 pointer-events-none"
-      />
-      <WoodSprite numberOfSprites={5} />
-
+    <main className={`w-screen bg-[#050014] ${Avatar.className} relative z-10`}>
       {/* Contenu dans le flux => main grandit */}
       <div className="relative z-10 flex flex-col items-center gap-6 pt-6 pb-24">
         <svg viewBox="0 0 1000 400" className="w-full h-auto md:w-1/2">

@@ -22,6 +22,7 @@ export default function DotGrid({
   baseColor = "#5227FF",
   className = "",
   style = {},
+  children,
 })
  {
   const wrapperRef = useRef(null);
@@ -138,6 +139,7 @@ export default function DotGrid({
       <div ref={wrapperRef} className="dot-grid__wrap">
         <canvas ref={canvasRef} className="dot-grid__canvas" />
       </div>
+      {children}
     </section>
   );
 };
