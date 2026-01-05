@@ -1,12 +1,9 @@
 "use client";
 
 import DotGrid from "../components/DotGrid";
-import { Inter } from "next/font/google";
-import localFont from "next/font/local";
-import Image from "next/image";
 import WoodSprite from "../components/Woodsprite";
-
-import { useState, useEffect } from "react";
+import localFont from "next/font/local";
+import { useEffect, useState } from "react";
 
 const Avatar = localFont({
   src: "./fonts/Avatar.ttf",
@@ -14,21 +11,33 @@ const Avatar = localFont({
 });
 
 export default function Home() {
+  const [iframeHeight, setIframeHeight] = useState<number>(800);
+
+  useEffect(() => {
+    const handler = (e: MessageEvent<{ height?: number }>) => {
+      if (!String(e.origin).endsWith("helloasso.com")) return;
+      const h = e.data?.height;
+      if (typeof h === "number") setIframeHeight(h);
+    };
+
+    window.addEventListener("message", handler);
+    return () => window.removeEventListener("message", handler);
+  }, []);
+
   return (
-    <main className="transparent h-auto w-screen overflow-hidden bg-[#050014] flex flex-col items-center justify-start gap-4 relative">
+    <main className={`w-screen bg-[#050014] ${Avatar.className} relative`}>
+      {/* Background fixed (ne compte pas dans la hauteur) */}
       <DotGrid
         dotSize={1.4}
         gap={15}
         baseColor="#00bfffff"
-        className="fixed top-0 left-0 h-screen w-screen z-100"
+        className="fixed inset-0 z-0 pointer-events-none"
       />
-      <div
-        className={`w-full flex flex-col items-center justify-center gap-4 absolute top-0 left-0 ${Avatar.className}`}
-      >
-        <svg
-          viewBox="0 0 1000 400"
-          className="w-full h-auto md:w-1/2 md:h-auto z-130"
-        >
+      <WoodSprite numberOfSprites={5} />
+
+      {/* Contenu dans le flux => main grandit */}
+      <div className="relative z-10 flex flex-col items-center gap-6 pt-6 pb-24">
+        <svg viewBox="0 0 1000 400" className="w-full h-auto md:w-1/2">
           <defs>
             <filter
               id="textShadow"
@@ -71,28 +80,15 @@ export default function Home() {
             AE ISAE-SUPAERO
           </text>
         </svg>
+
         <iframe
           id="haWidget"
           title="HelloAsso – Inscription"
           src="https://www.helloasso.com/associations/association-des-eleves-de-l-isae/evenements/billeterie-supavatar-tarif-late/widget"
-          className="w-5/6 border-0 h-auto z-110"
-          onLoad={() => {
-            const handler = (e: MessageEvent<{ height?: number }>) => {
-              if (!String(e.origin).endsWith("helloasso.com")) return;
-              const h = e.data?.height;
-              const el = document.getElementById(
-                "haWidget"
-              ) as HTMLIFrameElement | null;
-              if (el && typeof h === "number") el.style.height = `${h}px`;
-            };
-            window.addEventListener("message", handler, { once: false });
-          }}
+          className="w-5/6 border-0"
+          style={{ height: `${iframeHeight}px` }}
         />
       </div>
-      <WoodSprite numberOfSprites={5} />
     </main>
   );
 }
-
-
-
