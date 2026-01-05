@@ -3,7 +3,6 @@ import { useRef, useEffect, useCallback, useMemo } from "react";
 
 import "./DotGrid.css";
 
-
 function hexToRgb(hex) {
   const m = hex.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
   if (!m) return { r: 0, g: 0, b: 0 };
@@ -14,8 +13,6 @@ function hexToRgb(hex) {
   };
 }
 
-
-
 export default function DotGrid({
   dotSize = 16,
   gap = 32,
@@ -23,8 +20,7 @@ export default function DotGrid({
   className = "",
   style = {},
   children,
-})
- {
+}) {
   const wrapperRef = useRef(null);
   const canvasRef = useRef(null);
   const dotsRef = useRef([]);
@@ -34,12 +30,12 @@ export default function DotGrid({
   });
 
   const circlePath = useMemo(() => {
-  if (typeof window === "undefined" || !window.Path2D) return null;
+    if (typeof window === "undefined" || !window.Path2D) return null;
 
-  const p = new window.Path2D();
-  p.arc(0, 0, dotSize / 2, 0, Math.PI * 2);
-  return p;
-}, [dotSize]);
+    const p = new window.Path2D();
+    p.arc(0, 0, dotSize / 2, 0, Math.PI * 2);
+    return p;
+  }, [dotSize]);
 
   const baseRgb = useMemo(() => hexToRgb(baseColor), [baseColor]);
 
@@ -133,13 +129,12 @@ export default function DotGrid({
     };
   }, [buildGrid]);
 
-
   return (
     <section className={`dot-grid ${className}`} style={style}>
       <div ref={wrapperRef} className="dot-grid__wrap">
+        {children}
         <canvas ref={canvasRef} className="dot-grid__canvas" />
       </div>
-      {children}
     </section>
   );
-};
+}
