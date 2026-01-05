@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 
-export default function WoodSprite({ numberOfSprites = 1 }) {
+export default function WoodSprite({ numberOfSprites = 1, className = "" }) {
   // Canvas reference
   const canvasRef = useRef(null);
 
@@ -63,8 +63,10 @@ export default function WoodSprite({ numberOfSprites = 1 }) {
     let velY = new Array(numberOfSprites);
     for (let i = 0; i < numberOfSprites; i++) {
       currentFrame[i] = Math.floor(Math.random() * framePaths.length);
-      posX[i] = 0.5 * window.innerWidth + randomNormal(0, 0.15) * window.innerWidth;
-      posY[i] = 0.5 * window.innerHeight + randomNormal(0, 0.15) * window.innerHeight;
+      posX[i] =
+        0.5 * window.innerWidth + randomNormal(0, 0.15) * window.innerWidth;
+      posY[i] =
+        0.5 * window.innerHeight + randomNormal(0, 0.15) * window.innerHeight;
       angle[i] = 0;
       targetAngle[i] = 0;
       angleStart[i] = 0;
@@ -122,8 +124,11 @@ export default function WoodSprite({ numberOfSprites = 1 }) {
       for (let i = 0; i < numberOfSprites; i++) {
         frameTimeAccum[i] += dt;
         const randomTimeOffset = Math.floor(Math.random() * 20);
-        if (frameTimeAccum[i] >= frameDelays[currentFrame[i]]+randomTimeOffset) {
-          frameTimeAccum[i] -= frameDelays[currentFrame[i]]+randomTimeOffset;
+        if (
+          frameTimeAccum[i] >=
+          frameDelays[currentFrame[i]] + randomTimeOffset
+        ) {
+          frameTimeAccum[i] -= frameDelays[currentFrame[i]] + randomTimeOffset;
           currentFrame[i] = (currentFrame[i] + 1) % images.length;
           while (frameTimeAccum[i] >= frameDelays[currentFrame[i]]) {
             frameTimeAccum[i] -= frameDelays[currentFrame[i]];
@@ -209,7 +214,7 @@ export default function WoodSprite({ numberOfSprites = 1 }) {
   return (
     <canvas
       ref={canvasRef}
-      className={`fixed top-0 left-0 h-screen w-screen z-120 pointer-events-none`}
+      className={`fixed top-0 left-0 h-screen w-screen z-[120] pointer-events-none ${className}`}
     />
   );
 }

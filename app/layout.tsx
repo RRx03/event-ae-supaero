@@ -33,10 +33,10 @@ export default function RootLayout({
           dotSize={1.4}
           gap={15}
           baseColor="#00bfffff"
-          className="fixed inset-0 z-0 pointer-events-none"
+          className="z-[0]"
         />
         {children}
-        <WoodSprite numberOfSprites={5} />
+        <WoodSprite numberOfSprites={5} className="z-[5]"/>
       </body>
     </html>
   );
