@@ -75,7 +75,7 @@ export default function Home() {
           id="haWidget"
           title="HelloAsso – Inscription"
           src="https://www.helloasso.com/associations/association-des-eleves-de-l-isae/evenements/billeterie-supavatar-tarif-late/widget"
-          className="w-5/6 border-0 h-[1000px] z-110"
+          className="w-5/6 border-0 min-h-[1000px] z-110"
           onLoad={() => {
             const handler = (e: MessageEvent<{ height?: number }>) => {
               if (!String(e.origin).endsWith("helloasso.com")) return;
