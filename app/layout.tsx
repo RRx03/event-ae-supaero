@@ -27,16 +27,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-[#050014]`}
+        className={`${geistSans.variable} ${geistMono.variable} bg-[#050014] h-screen w-screen overflow-scroll`}
       >
         <DotGrid
           dotSize={1.4}
           gap={15}
           baseColor="#00bfffff"
           className="fixed inset-0 z-0 pointer-events-none"
-        >
-          {children}
-        </DotGrid>
+        />
+        {children}
         <WoodSprite numberOfSprites={5} />
       </body>
     </html>
