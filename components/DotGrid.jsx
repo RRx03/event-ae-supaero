@@ -128,11 +128,5 @@ export default function DotGrid({
     };
   }, [buildGrid]);
 
-  return (
-    <section className={`dot-grid ${className}`} style={style}>
-      <div ref={wrapperRef} className="dot-grid__wrap">
-        <canvas ref={canvasRef} className="dot-grid__canvas" />
-      </div>
-    </section>
-  );
+  return <canvas ref={canvasRef} className={`fixed top-0 left-0 h-screen w-screen z-0 pointer-events-none`} />;
 }
