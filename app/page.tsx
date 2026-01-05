@@ -26,12 +26,11 @@ export default function Home() {
 
   return (
     <main className={`w-screen bg-[#050014] ${Avatar.className} relative`}>
-      {/* Background fixed (ne compte pas dans la hauteur) */}
       <DotGrid
         dotSize={1.4}
         gap={15}
         baseColor="#00bfffff"
-        className="fixed inset-0 z-0 pointer-events-none"
+        className="fixed inset-0 h-screen w-screen z-0 pointer-events-none"
       />
       <WoodSprite numberOfSprites={5} />
 
