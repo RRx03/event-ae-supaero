@@ -32,7 +32,7 @@ export default function RootLayout({
         <DotGrid
           dotSize={1.4}
           gap={15}
-          baseColor="#00bfffff"
+          baseColor="#00bfff"
           className="z-[0]"
         />
         {children}
