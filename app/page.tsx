@@ -24,7 +24,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className={`w-screen bg-[#050014] ${Avatar.className} relative z-10`}>
+    <main className={`w-screen ${Avatar.className} relative z-10`}>
       {/* Contenu dans le flux => main grandit */}
       <div className="relative z-10 flex flex-col items-center gap-6 pt-6 pb-24">
         <svg viewBox="0 0 1000 400" className="w-full h-auto md:w-1/2">
