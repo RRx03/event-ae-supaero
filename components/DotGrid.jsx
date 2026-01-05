@@ -3,10 +3,10 @@
 import { useEffect, useRef } from "react";
 
 export default function DotGrid({
-  dotSize = 2,      // en CSS px
-  gap = 16,         // en CSS px
+  dotSize = 6,           // volontairement gros pour test
+  gap = 24,
   baseColor = "#00bfff",
-  opacity = 0.8,
+  opacity = 1,
   className = "",
   style = {},
 }) {
@@ -20,7 +20,7 @@ export default function DotGrid({
     if (!ctx) return;
 
     const draw = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = window.devicePixelRatio || 1;
       const cssW = window.innerWidth;
       const cssH = window.innerHeight;
 
@@ -32,31 +32,34 @@ export default function DotGrid({
       canvas.width = pxW;
       canvas.height = pxH;
 
-      // Safari: rendre tout explicite
+      // on dessine en coordonnées CSS (plus simple) en utilisant setTransform
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.globalCompositeOperation = "source-over";
       ctx.imageSmoothingEnabled = false;
 
-      // Clear en pixels device
-      ctx.clearRect(0, 0, pxW, pxH);
+      // VOILE VISIBLE (si tu vois ça, le canvas dessine)
+      ctx.clearRect(0, 0, cssW, cssH);
+      ctx.fillStyle = "rgba(255, 0, 0, 0.08)";
+      ctx.fillRect(0, 0, cssW, cssH);
 
-      // léger voile pour vérifier visuellement que ça dessine
-      ctx.fillStyle = "rgba(0,0,0,0.001)";
-      ctx.fillRect(0, 0, pxW, pxH);
+      // LIGNE + POINT GÉANT pour valider la couleur
+      ctx.globalAlpha = 1;
+      ctx.strokeStyle = "lime";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(cssW, cssH);
+      ctx.stroke();
 
-      ctx.globalAlpha = opacity;
       ctx.fillStyle = baseColor;
+      ctx.globalAlpha = opacity;
+      ctx.fillRect(40, 40, 40, 40); // carré géant cyan -> doit être visible
 
-      // Convertit tailles CSS -> pixels device
-      const s = Math.max(1, Math.round(dotSize * dpr));
-      const cell = Math.max(1, Math.round((dotSize + gap) * dpr));
-
-      // Snap pixel: sur Safari, le 0.5 est parfois contre-productif en fillRect
-      const startX = cell / 2;
-      const startY = cell / 2;
-
-      for (let y = startY; y < pxH; y += cell) {
-        for (let x = startX; x < pxW; x += cell) {
-          ctx.fillRect(x, y, s, s);
+      // DOT GRID
+      const cell = dotSize + gap;
+      for (let y = 0; y < cssH; y += cell) {
+        for (let x = 0; x < cssW; x += cell) {
+          ctx.fillRect(x, y, dotSize, dotSize);
         }
       }
 

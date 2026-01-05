@@ -27,7 +27,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="relative isolate bg-[#050014] min-h-screen w-screen overflow-x-hidden">
-        <DotGrid className="z-[0]" dotSize={2} gap={16} baseColor="#00bfff" />
+        <DotGrid
+          dotSize={6}
+          gap={24}
+          baseColor="#00bfff"
+          opacity={1}
+          className="z-[0]"
+        />
         {children}
         <WoodSprite numberOfSprites={5} className="z-[5]" />
       </body>
