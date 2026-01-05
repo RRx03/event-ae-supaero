@@ -47,6 +47,8 @@ export default function DotGrid({
     const draw = () => {
       // clear en coords CSS
       ctx.clearRect(0, 0, viewW, viewH);
+      ctx.fillStyle = "red";
+      ctx.fillRect(0, 0, 200, 200);
 
       // ⚠️ baseColor en 8 digits: OK mais si tu veux être 100% safe utilise rgba()
       ctx.fillStyle = baseColor;
