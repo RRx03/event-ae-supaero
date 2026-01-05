@@ -3,15 +3,15 @@
 import { useEffect, useMemo, useRef } from "react";
 
 export default function DotGrid({
-  dotSize = 1.4,
-  gap = 15,
+  dotSize = 2.2,
+  gap = 16,
   baseColor = "#00bfff",
+  opacity = 0.7,
   className = "",
   style = {},
 }) {
   const canvasRef = useRef(null);
 
-  // Path2D pour un cercle centré
   const circlePath = useMemo(() => {
     if (typeof window === "undefined" || !window.Path2D) return null;
     const p = new Path2D();
@@ -40,53 +40,56 @@ export default function DotGrid({
       canvas.width = Math.floor(viewW * dpr);
       canvas.height = Math.floor(viewH * dpr);
 
-      // coords en CSS pixels
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
     const draw = () => {
-      // clear en coords CSS
       ctx.clearRect(0, 0, viewW, viewH);
-      ctx.fillStyle = "red";
-      ctx.fillRect(0, 0, 200, 200);
 
-      // ⚠️ baseColor en 8 digits: OK mais si tu veux être 100% safe utilise rgba()
+      ctx.save();
+      ctx.globalAlpha = opacity;
       ctx.fillStyle = baseColor;
 
       const cell = dotSize + gap;
 
-      // On centre la grille
       const cols = Math.ceil(viewW / cell);
       const rows = Math.ceil(viewH / cell);
+
       const gridW = cols * cell;
       const gridH = rows * cell;
+
       const startX = (viewW - gridW) / 2 + cell / 2;
       const startY = (viewH - gridH) / 2 + cell / 2;
 
+      // Snap pour éviter les dots “flous” / invisibles à petite taille
+      const snap = (v) => Math.round(v) + 0.5;
+
       for (let y = 0; y < rows; y++) {
         for (let x = 0; x < cols; x++) {
-          const cx = startX + x * cell;
-          const cy = startY + y * cell;
+          const cx = snap(startX + x * cell);
+          const cy = snap(startY + y * cell);
+
           ctx.save();
           ctx.translate(cx, cy);
           ctx.fill(circlePath);
           ctx.restore();
         }
       }
+
+      ctx.restore();
     };
 
     resizeCanvas();
     draw();
 
-    // Redraw au resize
     const onResize = () => {
       resizeCanvas();
       draw();
     };
-    window.addEventListener("resize", onResize);
 
+    window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
-  }, [circlePath, dotSize, gap, baseColor]);
+  }, [circlePath, dotSize, gap, baseColor, opacity]);
 
   return (
     <canvas
